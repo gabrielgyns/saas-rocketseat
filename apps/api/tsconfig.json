@@ -2,5 +2,11 @@
   "extends": "@saas/tsconfig/node.json",
   "include": ["src/**/*"],
   "declaration": true,
-  "declarationMap": true
+  "declarationMap": true,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
