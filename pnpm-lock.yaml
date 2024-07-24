@@ -145,6 +145,9 @@ importers:
       '@saas/tsconfig':
         specifier: workspace:*
         version: link:../../config/typescript-config
+      '@types/node':
+        specifier: ^20.14.11
+        version: 20.14.11
 
 packages:
 
