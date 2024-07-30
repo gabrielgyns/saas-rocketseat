@@ -14,26 +14,15 @@ import { Separator } from '@/components/ui/separator'
 import { useFormState } from '@/hooks/use-form-state'
 
 import { singInWithGithub } from '../actions'
-import { signInWIthEmailAndPassword } from './actions'
+import { signUpAction } from './actions'
 
-export default function SignInForm() {
-  //   const [{ success, errors, message }, formAction, isPending] = useActionState(
-  //     signInWIthEmailAndPassword,
-  //     { success: false, message: null, errors: null },
-  //   )
-  /*
-    TODO: Here we could have used the `useActionState` hook to handle the form state
-    but it was decided to use the `useState` hook since the `useActionState` hook
-    is cleaning the form, in a way that the user has to fill the form again in case of error.
-    Using the `useState` hook, the user can see the error and fix it without losing the form data.
-    Coz of `e.preventDefault()`.
-  */
+export default function SignUpForm() {
   const router = useRouter()
 
   const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
-    signInWIthEmailAndPassword,
+    signUpAction,
     () => {
-      router.push('/')
+      router.push('/auth/sign-in')
     },
   )
 
@@ -57,8 +46,15 @@ export default function SignInForm() {
         )}
 
         <div className="space-y-1">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" name="name" />
+
+          {errors?.name && showErrorMessage(errors?.name[0])}
+        </div>
+
+        <div className="space-y-1">
           <Label htmlFor="email">Email</Label>
-          <Input type="text" id="email" name="email" />
+          <Input type="email" id="email" name="email" />
 
           {errors?.email && showErrorMessage(errors?.email[0])}
         </div>
@@ -68,25 +64,30 @@ export default function SignInForm() {
           <Input type="password" id="password" name="password" />
 
           {errors?.password && showErrorMessage(errors?.password[0])}
+        </div>
 
-          <Link
-            href="/auth/forgot-password"
-            className="text-xs font-medium text-foreground hover:underline"
-          >
-            Forgot your password?
-          </Link>
+        <div className="space-y-1">
+          <Label htmlFor="password_confirmation">Confirm your password</Label>
+          <Input
+            type="password"
+            id="password_confirmation"
+            name="password_confirmation"
+          />
+
+          {errors?.password_confirmation &&
+            showErrorMessage(errors?.password_confirmation[0])}
         </div>
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
-            'Sign in with email'
+            'Create an account'
           )}
         </Button>
 
         <Button variant="link" className="w-full" asChild size="sm">
-          <Link href="/auth/sign-up">Create a new account</Link>
+          <Link href="/auth/sign-in">Already have an account? Sign in</Link>
         </Button>
       </form>
 
@@ -100,7 +101,7 @@ export default function SignInForm() {
           disabled={isPending}
         >
           <Image src={githubIcon} className="mr-2 size-4 dark:invert" alt="" />
-          Sign in with Github
+          Sign up with Github
         </Button>
       </form>
     </div>
